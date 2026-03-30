@@ -1,0 +1,9 @@
+public class CalculatorMain {
+    public static void main(String[] args) {
+    CalculatorView view = new CalculatorView();
+        DbConnection model = new DbConnection();
+        CalculatorController cont = new CalculatorController(view, model); 
+
+        view.setVisible(true);
+    
+    }
