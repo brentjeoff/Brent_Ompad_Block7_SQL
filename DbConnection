@@ -1,0 +1,54 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;        
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DbConnection {
+    
+        String url = "jdbc:mysql://127.0.0.1:3306/brentdatabase_mvc"; 
+        String user = "root"; 
+        String password = "";
+        public void calculateRecords (int text) throws ClassNotFoundException{       
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+           if (conn != null) {
+                System.out.println("Connected to the database!");
+               String sql = "INSERT INTO calculatorrecords (Records) VALUES (?)";
+   
+                PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setDouble(1, text);
+
+            ps.executeUpdate();
+            conn.close();
+           }      
+        } catch (SQLException e) {
+            System.out.println("Connection failed!");
+            e.printStackTrace(); 
+  }
+          
+        }
+        public void clearRecords () throws SQLException{
+            try (Connection conn = DriverManager.getConnection(url, user, password)) {
+           if (conn != null) {
+               System.out.println("Connected to the database!");
+               String sql = "DELETE FROM calculatorrecords";
+                
+               
+                Statement stm = (Statement) conn.createStatement();
+                
+                stm.executeUpdate(sql);
+           }
+            }
+           }
+
+    void addRow(Object[] object) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+        }
+        
+        
+        
+
+
+
