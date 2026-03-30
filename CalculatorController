@@ -1,0 +1,142 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+public class CalculatorController {
+    public CalculatorView view;
+    public DbConnection model;
+    
+    public int num1, num2;
+    public String op;
+    int Result; 
+    public CalculatorController(CalculatorView view, DbConnection model) {
+        this.view = view;
+        this.model = model;
+        
+        for (int i = 0; i < 10; i++) {
+            int num = i;
+            view.numberButtons[i].addActionListener(e ->
+                view.textfield.setText(view.textfield.getText() + num)
+            );
+        }
+        view.addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                num1 = Integer.parseInt(view.textfield.getText());
+        view.textfield.setText("");
+        op="+";
+            }
+        });
+        view.subButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                num1 = Integer.parseInt(view.textfield.getText());
+        view.textfield.setText("");
+        op="-";
+            }
+        });
+        
+        view.mulButton.addActionListener(new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                num1 = Integer.parseInt(view.textfield.getText());
+        view.textfield.setText("");
+        op="*";
+            }
+        });
+        view.divButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              num1 = Integer.parseInt(view.textfield.getText());
+        view.textfield.setText("");
+        op="/";
+            }
+        });
+        
+     view.equButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            num2 = Integer.parseInt(view.textfield.getText());
+       if (op == "+") {
+        Result = num1 + num2; 
+        view.textfield.setText(String. valueOf(Result));    
+       } else if (op == "-") {
+        Result = num1 - num2; 
+        view.textfield.setText(String. valueOf(Result));
+       } else if (op == "*") {
+        Result = num1 * num2; 
+        view.textfield.setText(String. valueOf(Result));
+       } else if (op == "/") {
+        Result = num1 / num2; 
+        view.textfield.setText(String. valueOf(Result));
+       }     
+            }
+            
+            
+            });
+
+        // Clear
+        view.cButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              view.textfield.setText("");
+            }
+        });
+        view.saveButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              
+              
+        double value =  Double.parseDouble(view.textfield.getText());
+         CalculatorRecords.addResult(value);
+          int text = Integer.parseInt(view.textfield.getText());
+                try {
+                    model.calculateRecords(text);
+                } catch (ClassNotFoundException ex) {
+                    System.getLogger(CalculatorController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                }
+            }
+            
+    
+            
+        });
+        
+         view.clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    model.clearRecords();
+                     //double value =  Double.parseDouble(view.textfield.getText());
+                   //  CalculatorRecords.addResult(value);
+                    int rowIndex = Integer.parseInt(view.textfield.getText());
+                    CalculatorRecords.deleteRow(rowIndex);
+                } catch (SQLException ex) {
+                    System.getLogger(CalculatorController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                }
+            }
+         
+                    
+            
+        });
+          view.viewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 CalculatorRecords recordTable = new CalculatorRecords();
+        recordTable.setVisible(true);
+        recordTable.pack();
+        recordTable.setLocationRelativeTo(null);
+        recordTable.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        double value =  Double.parseDouble(view.textfield.getText());
+         CalculatorRecords.addResult(value);
+            }
+            
+            
+          });
+          
+          
+    }
+}
+    
+    
+
